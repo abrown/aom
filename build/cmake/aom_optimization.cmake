@@ -88,6 +88,8 @@ function(get_asm_obj_format out_format)
     elseif("${AOM_TARGET_SYSTEM}" STREQUAL "MSYS"
            OR "${AOM_TARGET_SYSTEM}" STREQUAL "Windows")
       set(objformat "win64")
+    elseif("${AOM_TARGET_SYSTEM}" STREQUAL "Emscripten")
+      set(objformat "wasm")
     else()
       message(FATAL_ERROR "Unknown obj format: ${AOM_TARGET_SYSTEM}")
     endif()
