@@ -43,6 +43,7 @@ typedef enum {
   AOM_CPU_LAST
 } aom_cpu_t;
 
+#if CONFIG_RUNTIME_CPU_DETECT
 #if defined(__GNUC__) && __GNUC__ || defined(__ANDROID__)
 #if ARCH_X86_64
 #define cpuid(func, func2, ax, bx, cx, dx)                      \
@@ -115,6 +116,15 @@ typedef enum {
 #endif
 /* clang-format on */
 #endif /* end others */
+#else
+#define cpuid(func, func2, a, b, c, d) \
+  do {                                 \
+    a = 0;                       \
+    b = 0;                       \
+    c = 0;                       \
+    d = 0;                       \
+  } while (0)
+#endif
 
 // NaCl has no support for xgetbv or the raw opcode.
 #if !defined(__native_client__) && (defined(__i386__) || defined(__x86_64__))
@@ -167,6 +177,7 @@ static INLINE uint64_t xgetbv(void) {
 #define BIT(n) (1 << n)
 #endif
 
+#ifdef CONFIG_RUNTIME_CPU_DETECT
 static INLINE int x86_simd_caps(void) {
   unsigned int flags = 0;
   unsigned int mask = ~0;
@@ -221,6 +232,11 @@ static INLINE int x86_simd_caps(void) {
 
   return flags & mask;
 }
+#else
+static INLINE int x86_simd_caps(void) {
+    return 0;
+}
+#endif
 
 // Fine-Grain Measurement Functions
 //
@@ -243,6 +259,7 @@ static INLINE int x86_simd_caps(void) {
 // x86_readtsc64 to read the timestamp counter in a 64-bit integer. The
 // out-of-order leakage that can occur is minimal compared to total runtime.
 static INLINE unsigned int x86_readtsc(void) {
+#if CONFIG_RUNTIME_CPU_DETECT
 #if defined(__GNUC__) && __GNUC__
   unsigned int tsc;
   __asm__ __volatile__("rdtsc\n\t" : "=a"(tsc) :);
@@ -258,9 +275,13 @@ static INLINE unsigned int x86_readtsc(void) {
   __asm rdtsc;
 #endif
 #endif
+#else
+  return 0; // TODO
+#endif
 }
 // 64-bit CPU cycle counter
 static INLINE uint64_t x86_readtsc64(void) {
+#if CONFIG_RUNTIME_CPU_DETECT
 #if defined(__GNUC__) && __GNUC__
   uint32_t hi, lo;
   __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi));
@@ -276,10 +297,14 @@ static INLINE uint64_t x86_readtsc64(void) {
   __asm rdtsc;
 #endif
 #endif
+#else
+    return 0; // (uint64_t)__rdtsc();
+#endif
 }
 
 // 32-bit CPU cycle counter with a partial fence against out-of-order execution.
 static INLINE unsigned int x86_readtscp(void) {
+#if CONFIG_RUNTIME_CPU_DETECT
 #if defined(__GNUC__) && __GNUC__
   unsigned int tscp;
   __asm__ __volatile__("rdtscp\n\t" : "=a"(tscp) :);
@@ -297,6 +322,9 @@ static INLINE unsigned int x86_readtscp(void) {
 #else
   __asm rdtscp;
 #endif
+#endif
+#else
+    return 0; // (unsigned int)__rdtscp();
 #endif
 }
 
