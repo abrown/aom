@@ -1,3 +1,31 @@
+Note: this repository is for experimental purposes; do not rely on it as it may disappear or drastically change.
+Its latest commits include (WIP) changes necessary to build libaom for Wasm SIMD. Currently, `cmake` configuration looks
+like:
+
+```shell script
+cmake ../aom -DENABLE_CCACHE=1 -DENABLE_DOCS=0 -DENABLE_TESTS=0 -DCONFIG_ACCOUNTING=1 -DCONFIG_INSPECTION=1 \
+  -DCONFIG_MULTITHREAD=0 -DCONFIG_RUNTIME_CPU_DETECT=0 -DCONFIG_WEBM_IO=0 -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_TOOLCHAIN_FILE=../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+  -DCONFIG_RUNTIME_CPU_DETECT=0 -DAOM_TARGET_CPU=x86_64 -DENABLE_SSE4_1=1 -DENABLE_SIMDE=1
+```
+
+And to compile a subset of libaom:
+
+```shell script
+make aom_av1_common_sse4_intrinsics
+```
+
+The above compiles (caveat: on my machine) with the following emsdk installed:
+
+```shell script
+$ ../emsdk/upstream/emscripten/emcc --version
+emcc (Emscripten gcc/clang-like replacement) 1.39.6 (commit 997b0a19ff6fdfe0be8b966e1fed05bf5ebf85e4)
+```
+
+[original README.md content below]
+
+---------------------------------------------
+
 # AV1 Codec Library
 
 ## Contents
