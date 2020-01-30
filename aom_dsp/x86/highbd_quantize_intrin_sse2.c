@@ -9,7 +9,11 @@
  * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
  */
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>
+#endif
 
 #include "aom_dsp/aom_dsp_common.h"
 #include "aom_mem/aom_mem.h"

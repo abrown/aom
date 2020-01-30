@@ -10,7 +10,11 @@
  */
 
 #include <assert.h>
-#include <emmintrin.h>
+#if ENABLE_SIMDE
+    #include "simde/x86/sse2.h"
+#else
+    #include <emmintrin.h>
+#endif
 #include "config/aom_dsp_rtcd.h"
 #include "aom/aom_integer.h"
 #include "av1/encoder/av1_quantize.h"

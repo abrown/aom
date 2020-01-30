@@ -12,7 +12,16 @@
 #ifndef AOM_AOM_DSP_X86_SYNONYMS_H_
 #define AOM_AOM_DSP_X86_SYNONYMS_H_
 
+#if ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
+#endif
+
 #include <string.h>
 
 #include "config/aom_config.h"

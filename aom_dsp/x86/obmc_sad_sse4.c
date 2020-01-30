@@ -10,7 +10,11 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 
 #include "config/aom_config.h"
 

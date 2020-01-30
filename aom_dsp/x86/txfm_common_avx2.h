@@ -12,7 +12,11 @@
 #ifndef AOM_AOM_DSP_X86_TXFM_COMMON_AVX2_H_
 #define AOM_AOM_DSP_X86_TXFM_COMMON_AVX2_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>
+#endif
 #include "aom/aom_integer.h"
 #include "aom_dsp/x86/synonyms.h"
 

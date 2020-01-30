@@ -9,7 +9,11 @@
  * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
  */
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>  // SSE4.1
+#endif
 
 #include <assert.h>
 

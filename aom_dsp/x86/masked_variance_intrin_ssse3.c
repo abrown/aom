@@ -11,7 +11,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/ssse3.h"
+#else
 #include <tmmintrin.h>
+#endif
 
 #include "config/aom_config.h"
 #include "config/aom_dsp_rtcd.h"

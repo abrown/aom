@@ -12,12 +12,23 @@
 #ifndef AOM_AOM_DSP_SIMD_V64_INTRINSICS_X86_H_
 #define AOM_AOM_DSP_SIMD_V64_INTRINSICS_X86_H_
 
-#include <emmintrin.h>
-#if defined(__SSSE3__)
-#include <tmmintrin.h>
-#endif
-#if defined(__SSE4_1__)
-#include <smmintrin.h>
+#if ENABLE_SIMDE
+    #define SIMDE_ENABLE_NATIVE_ALIASES 1
+    #include "simde/x86/sse2.h"
+    #if defined(__SSSE3__)
+        #include "simde/x86/ssse3.h"
+    #endif
+    #if defined(__SSE4_1__)
+        #include "simde/x86/sse4.1.h"
+    #endif
+# else
+    #include <emmintrin.h>
+    #if defined(__SSSE3__)
+        #include <tmmintrin.h>
+    #endif
+    #if defined(__SSE4_1__)
+        #include <smmintrin.h>
+    #endif
 #endif
 
 typedef __m128i v64;

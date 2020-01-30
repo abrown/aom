@@ -10,7 +10,11 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>
+#endif
 #include <stdio.h>
 
 #include "aom_dsp/x86/synonyms.h"

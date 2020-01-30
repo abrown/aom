@@ -25,7 +25,11 @@
 #pragma GCC optimize "-fabi-version=0"
 #endif
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 
 #include "aom_dsp/simd/v128_intrinsics_x86.h"
 

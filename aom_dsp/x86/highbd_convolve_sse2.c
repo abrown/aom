@@ -8,7 +8,11 @@
  * Media Patent License 1.0 was not distributed with this source code in the
  * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
  */
-#include <emmintrin.h>
+#if ENABLE_SIMDE
+    #include "simde/x86/sse2.h"
+#else
+    #include <emmintrin.h>
+#endif
 
 #include "config/aom_dsp_rtcd.h"
 #include "aom_dsp/x86/convolve.h"

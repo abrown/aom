@@ -10,7 +10,11 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>  // AVX2
+#endif
 
 #include "config/aom_dsp_rtcd.h"
 

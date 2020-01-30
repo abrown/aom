@@ -12,7 +12,11 @@
 #ifndef AOM_AOM_DSP_X86_OBMC_INTRINSIC_SSE4_H_
 #define AOM_AOM_DSP_X86_OBMC_INTRINSIC_SSE4_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>
+#endif
 
 #include "aom_dsp/x86/obmc_intrinsic_ssse3.h"
 
