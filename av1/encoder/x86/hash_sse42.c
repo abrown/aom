@@ -10,7 +10,11 @@
  */
 
 #include <stdint.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>
+#endif
 
 // Byte-boundary alignment issues
 #define ALIGN_SIZE 8

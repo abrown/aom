@@ -11,8 +11,16 @@
 #ifndef AOM_AV1_COMMON_X86_AV1_INV_TXFM_SSSE3_H_
 #define AOM_AV1_COMMON_X86_AV1_INV_TXFM_SSSE3_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>  // SSE2
+#endif
+#ifdef ENABLE_SIMDE
+#include "simde/x86/ssse3.h"
+#else
 #include <tmmintrin.h>  // SSSE3
+#endif
 
 #include "config/aom_config.h"
 #include "config/av1_rtcd.h"

@@ -11,7 +11,11 @@
 #ifndef AOM_AV1_ENCODER_X86_AV1_FWD_TXFM_SSE2_H_
 #define AOM_AV1_ENCODER_X86_AV1_FWD_TXFM_SSE2_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 
 #include "config/aom_config.h"
 #include "config/av1_rtcd.h"

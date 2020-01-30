@@ -12,7 +12,11 @@
 #ifndef AOM_AV1_COMMON_X86_HIGHBD_TXFM_UTILITY_SSE4_H_
 #define AOM_AV1_COMMON_X86_HIGHBD_TXFM_UTILITY_SSE4_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h> /* SSE4.1 */
+#endif
 
 #define TRANSPOSE_4X4(x0, x1, x2, x3, y0, y1, y2, y3) \
   do {                                                \

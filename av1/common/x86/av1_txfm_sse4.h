@@ -12,7 +12,15 @@
 #ifndef AOM_AV1_COMMON_X86_AV1_TXFM_SSE4_H_
 #define AOM_AV1_COMMON_X86_AV1_TXFM_SSE4_H_
 
+#ifdef ENABLE_SIMDE
+    #include "simde/x86/sse4.1.h"
+#else
+    #ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>
+#endif
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -9,7 +9,11 @@
  * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
  */
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>
+#endif
 
 #include "aom_dsp/x86/synonyms.h"
 #include "av1/common/warped_motion.h"

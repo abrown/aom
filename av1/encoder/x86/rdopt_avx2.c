@@ -10,7 +10,11 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 #include "aom_dsp/x86/synonyms_avx2.h"
 #include "aom_ports/system_state.h"
 

@@ -10,9 +10,21 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>  // SSE2
+#endif
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>  /* SSE4.1 */
+#endif
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>  /* AVX2 */
+#endif
 
 #include "aom/aom_integer.h"
 #include "aom_dsp/x86/mem_sse2.h"

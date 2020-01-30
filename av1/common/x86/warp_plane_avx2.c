@@ -9,7 +9,11 @@
  * PATENTS file, you can obtain it at www.aomedia.org/license/patent.
  */
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 #include "config/av1_rtcd.h"
 #include "av1/common/warped_motion.h"
 #include "aom_dsp/x86/synonyms.h"

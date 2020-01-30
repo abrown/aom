@@ -11,7 +11,11 @@
 
 #ifndef AOM_AV1_ENCODER_X86_AV1_FWD_TXFM_AVX2_H_
 #define AOM_AV1_ENCODER_X86_AV1_FWD_TXFM_AVX2_H_
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 
 // out0 = in0*w0 + in1*w1
 // out1 = -in1*w0 + in0*w1

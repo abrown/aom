@@ -11,7 +11,11 @@
 #ifndef AOM_AV1_COMMON_X86_AV1_INV_TXFM_AVX2_H_
 #define AOM_AV1_COMMON_X86_AV1_INV_TXFM_AVX2_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
 #include <immintrin.h>
+#endif
 
 #include "config/aom_config.h"
 #include "config/av1_rtcd.h"

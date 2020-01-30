@@ -10,8 +10,16 @@
  */
 
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>  // SSE2
+#endif
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>  /* SSE4.1 */
+#endif
 
 #include "aom/aom_integer.h"
 #include "av1/common/onyxc_int.h"

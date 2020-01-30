@@ -12,7 +12,11 @@
 #ifndef AOM_AV1_ENCODER_X86_AV1_TXFM1D_SSE4_H_
 #define AOM_AV1_ENCODER_X86_AV1_TXFM1D_SSE4_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>
+#endif
 #include "av1/common/av1_txfm.h"
 #include "av1/common/x86/av1_txfm_sse4.h"
 

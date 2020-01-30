@@ -11,7 +11,11 @@
 #ifndef AOM_AV1_COMMON_X86_AV1_TXFM_SSE2_H_
 #define AOM_AV1_COMMON_X86_AV1_TXFM_SSE2_H_
 
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse2.h"
+#else
 #include <emmintrin.h>  // SSE2
+#endif
 
 #include "config/aom_config.h"
 #include "config/av1_rtcd.h"

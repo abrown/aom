@@ -10,7 +10,15 @@
  */
 
 #include <assert.h>
+#if ENABLE_SIMDE
+#include "simde/x86/avx.h"
+#else
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse4.1.h"
+#else
 #include <smmintrin.h>
+#endif
+#endif
 
 #include "config/aom_dsp_rtcd.h"
 
