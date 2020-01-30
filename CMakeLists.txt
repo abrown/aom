@@ -469,6 +469,11 @@ foreach(aom_app ${AOM_APP_TARGETS})
   target_link_libraries(${aom_app} ${AOM_LIB_LINK_TYPE} aom)
 endforeach()
 
+if(ENABLE_SIMDE)
+  add_definitions(-DENABLE_SIMDE=1 -DSIMDE_ENABLE_NATIVE_ALIASES=1)
+  include_directories("${AOM_ROOT}/third_party/simde")
+endif()
+
 if(ENABLE_EXAMPLES OR ENABLE_TESTS OR ENABLE_TOOLS)
   if(CONFIG_LIBYUV)
     add_library(yuv OBJECT ${AOM_LIBYUV_SOURCES})
