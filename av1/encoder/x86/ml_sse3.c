@@ -11,7 +11,11 @@
 
 #include <stdbool.h>
 #include <assert.h>
+#ifdef ENABLE_SIMDE
+#include "simde/x86/sse3.h"
+#else
 #include <pmmintrin.h>
+#endif
 
 #include "config/av1_rtcd.h"
 #include "av1/encoder/ml.h"
