@@ -6,7 +6,8 @@ like:
 cmake ../aom -DENABLE_CCACHE=1 -DENABLE_DOCS=0 -DENABLE_TESTS=0 -DCONFIG_ACCOUNTING=1 -DCONFIG_INSPECTION=1 \
   -DCONFIG_MULTITHREAD=0 -DCONFIG_RUNTIME_CPU_DETECT=0 -DCONFIG_WEBM_IO=0 -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_TOOLCHAIN_FILE=../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
-  -DCONFIG_RUNTIME_CPU_DETECT=0 -DAOM_TARGET_CPU=x86_64 -DENABLE_SSE4_1=1 -DENABLE_SIMDE=1
+  -DCONFIG_RUNTIME_CPU_DETECT=0 -DAOM_TARGET_CPU=x86_64 -DENABLE_SIMDE=1 \
+  -DENABLE_SSE4_1=1 -DENABLE_SSE4_2=0 -DENABLE_AVX=0 -DENABLE_AVX2=0 
 ```
 
 And to compile a subset of libaom:
@@ -20,6 +21,32 @@ The above compiles (caveat: on my machine) with the following emsdk installed:
 ```shell script
 $ ../emsdk/upstream/emscripten/emcc --version
 emcc (Emscripten gcc/clang-like replacement) 1.39.6 (commit 997b0a19ff6fdfe0be8b966e1fed05bf5ebf85e4)
+```
+
+I can almost `make inspect`, but apparently it still thinks it wants to use `yasm`:
+
+```shell script
+make inspect
+...
+[ 90%] Building ASM object /home/abrown/Code/aom-build-analyzer/asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o
+yasm: FATAL: unrecognized object format `wasm'
+make[3]: *** [CMakeFiles/aom.dir/build.make:158: asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:869: CMakeFiles/aom.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:654: CMakeFiles/inspect.dir/rule] Error 2
+make: *** [Makefile:359: inspect] Error 2
+```
+
+I suspect this has something to do with `aom_configure.cmake:133ff` but and setting `set(AS_EXECUTABLE ${CMAKE_C_COMPILER} -c)` there when `Emscripten` is enabled results in:
+
+```shell script
+make inspect
+...
+[ 90%] Building ASM object /home/abrown/Code/aom-build-analyzer/asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o
+shared:ERROR: /home/abrown/Code/aom/av1/encoder/x86/av1_quantize_ssse3_x86_64.asm: Input file has an unknown suffix, don't know what to do with it!
+make[3]: *** [CMakeFiles/aom.dir/build.make:158: asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:869: CMakeFiles/aom.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:654: CMakeFiles/inspect.dir/rule] Error 2
+make: *** [Makefile:359: inspect] Error 2
 ```
 
 [original README.md content below]

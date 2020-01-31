@@ -131,25 +131,29 @@ if(NOT MSVC)
 endif()
 
 if("${AOM_TARGET_CPU}" STREQUAL "x86" OR "${AOM_TARGET_CPU}" STREQUAL "x86_64")
-  find_program(AS_EXECUTABLE yasm $ENV{YASM_PATH})
-  if(NOT AS_EXECUTABLE OR ENABLE_NASM)
-    unset(AS_EXECUTABLE CACHE)
-    find_program(AS_EXECUTABLE nasm $ENV{NASM_PATH})
-    if(AS_EXECUTABLE)
-      test_nasm()
+  if(EMSCRIPTEN)
+    set(AS_EXECUTABLE ${CMAKE_C_COMPILER} -c)
+  else()
+    find_program(AS_EXECUTABLE yasm $ENV{YASM_PATH})
+    if(NOT AS_EXECUTABLE OR ENABLE_NASM)
+      unset(AS_EXECUTABLE CACHE)
+      find_program(AS_EXECUTABLE nasm $ENV{NASM_PATH})
+      if(AS_EXECUTABLE)
+        test_nasm()
+      endif()
     endif()
-  endif()
 
-  if(NOT AS_EXECUTABLE)
-    message(
-      FATAL_ERROR
-        "Unable to find assembler. Install 'yasm' or 'nasm.' "
-        "To build without optimizations, add -DAOM_TARGET_CPU=generic to "
-        "your cmake command line.")
+    if(NOT AS_EXECUTABLE)
+      message(
+        FATAL_ERROR
+          "Unable to find assembler. Install 'yasm' or 'nasm.' "
+          "To build without optimizations, add -DAOM_TARGET_CPU=generic to "
+          "your cmake command line.")
+    endif()
+    get_asm_obj_format("objformat")
+    set(AOM_AS_FLAGS -f ${objformat} ${AOM_AS_FLAGS})
+    string(STRIP "${AOM_AS_FLAGS}" AOM_AS_FLAGS)
   endif()
-  get_asm_obj_format("objformat")
-  set(AOM_AS_FLAGS -f ${objformat} ${AOM_AS_FLAGS})
-  string(STRIP "${AOM_AS_FLAGS}" AOM_AS_FLAGS)
 elseif("${AOM_TARGET_CPU}" MATCHES "arm")
   if("${AOM_TARGET_SYSTEM}" STREQUAL "Darwin")
     set(AS_EXECUTABLE as)
