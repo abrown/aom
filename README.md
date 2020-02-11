@@ -79,14 +79,11 @@ warning: undefined symbol: aom_v_predictor_8x8_sse2
 [100%] Built target inspect
 ```
 
-The unfortunate thing is that, due to the changes to get this to compile (and likely related to those undefined symbols),
-no actual SIMD instructions are emitted:
+Even with the warnings above, some SIMD instructions are being emitted:
 
 ```shell script
 wasm-opcodecnt --enable-all examples/inspect.wasm | grep i32x4
 ```
-
-And neither are they emitted in any of the object filew
 
 ```shell script
 find . -name '*.o' -type f -exec wasm-opcodecnt --enable-all {} \; | grep i32x4

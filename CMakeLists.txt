@@ -301,6 +301,7 @@ if(CONFIG_AV1_DECODER AND ENABLE_EXAMPLES)
       append_link_flag_to_target("inspect" "--emrun")
       append_link_flag_to_target("inspect" "-s USE_PTHREADS=0")
       append_link_flag_to_target("inspect" "-s ERROR_ON_UNDEFINED_SYMBOLS=0")
+      append_link_flag_to_target("inspect" "-s SIMD=1")
       append_link_flag_to_target("inspect" "-s WASM=1")
       append_link_flag_to_target("inspect" "-s MODULARIZE=1")
       append_link_flag_to_target("inspect" "-s ALLOW_MEMORY_GROWTH=1")
@@ -310,6 +311,7 @@ if(CONFIG_AV1_DECODER AND ENABLE_EXAMPLES)
                                  "-s EXPORT_NAME=\"\'DecoderModule\'\"")
       append_link_flag_to_target("inspect" "--memory-init-file 0")
 
+      append_compiler_flag("-s SIMD=1")
       if("${CMAKE_BUILD_TYPE}" STREQUAL "")
 
         # Default to -O3 when no build type is specified.
