@@ -23,30 +23,73 @@ $ ../emsdk/upstream/emscripten/emcc --version
 emcc (Emscripten gcc/clang-like replacement) 1.39.6 (commit 997b0a19ff6fdfe0be8b966e1fed05bf5ebf85e4)
 ```
 
-I can almost `make inspect`, but apparently it still thinks it wants to use `yasm`:
+I can almost `make inspect`, but apparently it still thinks it wants to use `yasm`. To avoid this we remove all 
+CMake references to `*.asm` files, which allows the build to continue (we also add `-DCONFIG_AV1_ENCODER=0` to the 
+CMake configuration to avoid unused code paths):
 
 ```shell script
 make inspect
+
 ...
-[ 90%] Building ASM object /home/abrown/Code/aom-build-analyzer/asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o
-yasm: FATAL: unrecognized object format `wasm'
-make[3]: *** [CMakeFiles/aom.dir/build.make:158: asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o] Error 1
-make[2]: *** [CMakeFiles/Makefile2:869: CMakeFiles/aom.dir/all] Error 2
-make[1]: *** [CMakeFiles/Makefile2:654: CMakeFiles/inspect.dir/rule] Error 2
-make: *** [Makefile:359: inspect] Error 2
+[ 98%] Linking C static library libinspect_1_inspect-post_js.a
+[ 98%] Built target inspect_1_inspect-post_js
+Scanning dependencies of target inspect
+[100%] Building C object CMakeFiles/inspect.dir/examples/inspect.c.o
+~/Code/aom/examples/inspect.c:310:34: warning: unused parameter 'json' [-Wunused-parameter]
+void on_frame_decoded_dump(char *json) {
+                                 ^
+1 warning generated.
+[100%] Linking CXX executable examples/inspect.js
+shared:WARNING: libinspect_1_inspect-post_js.a: archive is missing an index; Use emar when creating libraries to ensure an index is created
+shared:WARNING: libinspect_1_inspect-post_js.a: adding index
+warning: undefined symbol: aom_convolve_copy_sse2
+warning: undefined symbol: aom_dc_128_predictor_16x16_sse2
+warning: undefined symbol: aom_dc_128_predictor_32x32_sse2
+warning: undefined symbol: aom_dc_128_predictor_4x4_sse2
+warning: undefined symbol: aom_dc_128_predictor_8x8_sse2
+warning: undefined symbol: aom_dc_left_predictor_16x16_sse2
+warning: undefined symbol: aom_dc_left_predictor_32x32_sse2
+warning: undefined symbol: aom_dc_left_predictor_4x4_sse2
+warning: undefined symbol: aom_dc_left_predictor_8x8_sse2
+warning: undefined symbol: aom_dc_predictor_16x16_sse2
+warning: undefined symbol: aom_dc_predictor_32x32_sse2
+warning: undefined symbol: aom_dc_predictor_4x4_sse2
+warning: undefined symbol: aom_dc_predictor_8x8_sse2
+warning: undefined symbol: aom_dc_top_predictor_16x16_sse2
+warning: undefined symbol: aom_dc_top_predictor_32x32_sse2
+warning: undefined symbol: aom_dc_top_predictor_4x4_sse2
+warning: undefined symbol: aom_dc_top_predictor_8x8_sse2
+warning: undefined symbol: aom_h_predictor_16x16_sse2
+warning: undefined symbol: aom_h_predictor_32x32_sse2
+warning: undefined symbol: aom_h_predictor_4x4_sse2
+warning: undefined symbol: aom_h_predictor_8x8_sse2
+warning: undefined symbol: aom_highbd_dc_predictor_16x16_sse2
+warning: undefined symbol: aom_highbd_dc_predictor_32x32_sse2
+warning: undefined symbol: aom_highbd_dc_predictor_4x4_sse2
+warning: undefined symbol: aom_highbd_dc_predictor_8x8_sse2
+warning: undefined symbol: aom_highbd_v_predictor_16x16_sse2
+warning: undefined symbol: aom_highbd_v_predictor_32x32_sse2
+warning: undefined symbol: aom_highbd_v_predictor_4x4_sse2
+warning: undefined symbol: aom_highbd_v_predictor_8x8_sse2
+warning: undefined symbol: aom_reset_mmx_state
+warning: undefined symbol: aom_v_predictor_16x16_sse2
+warning: undefined symbol: aom_v_predictor_32x32_sse2
+warning: undefined symbol: aom_v_predictor_4x4_sse2
+warning: undefined symbol: aom_v_predictor_8x8_sse2
+[100%] Built target inspect
 ```
 
-I suspect this has something to do with `aom_configure.cmake:133ff` but and setting `set(AS_EXECUTABLE ${CMAKE_C_COMPILER} -c)` there when `Emscripten` is enabled results in:
+The unfortunate thing is that, due to the changes to get this to compile (and likely related to those undefined symbols),
+no actual SIMD instructions are emitted:
 
 ```shell script
-make inspect
-...
-[ 90%] Building ASM object /home/abrown/Code/aom-build-analyzer/asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o
-shared:ERROR: /home/abrown/Code/aom/av1/encoder/x86/av1_quantize_ssse3_x86_64.asm: Input file has an unknown suffix, don't know what to do with it!
-make[3]: *** [CMakeFiles/aom.dir/build.make:158: asm_objects/aom_av1_encoder_ssse3/av1_quantize_ssse3_x86_64.asm.o] Error 1
-make[2]: *** [CMakeFiles/Makefile2:869: CMakeFiles/aom.dir/all] Error 2
-make[1]: *** [CMakeFiles/Makefile2:654: CMakeFiles/inspect.dir/rule] Error 2
-make: *** [Makefile:359: inspect] Error 2
+wasm-opcodecnt --enable-all examples/inspect.wasm | grep i32x4
+```
+
+And neither are they emitted in any of the object filew
+
+```shell script
+find . -name '*.o' -type f -exec wasm-opcodecnt --enable-all {} \; | grep i32x4
 ```
 
 [original README.md content below]
