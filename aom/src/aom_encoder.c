@@ -179,7 +179,7 @@ aom_codec_err_t aom_codec_enc_config_default(aom_codec_iface_t *iface,
   return res;
 }
 
-#if ARCH_X86 || ARCH_X86_64
+#if !__EMSCRIPTEN__ && (ARCH_X86 || ARCH_X86_64)
 /* On X86, disable the x87 unit's internal 80 bit precision for better
  * consistency with the SSE unit's 64 bit precision.
  */

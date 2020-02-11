@@ -309,7 +309,7 @@ aom_image_t *img = NULL;
 
 void on_frame_decoded_dump(char *json) {
 #ifdef __EMSCRIPTEN__
-  EM_ASM_({ Module.on_frame_decoded_json($0); }, json);
+  // EM_ASM_({ Module.on_frame_decoded_json($0); }, json);
 #else
   printf("%s", json);
 #endif

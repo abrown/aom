@@ -49,8 +49,8 @@ list(APPEND AOM_PORTS_SOURCES_PPC "${AOM_ROOT}/aom_ports/ppc.h"
 # * The libaom target must exist before this function is called.
 function(setup_aom_ports_targets)
   if("${AOM_TARGET_CPU}" MATCHES "^x86")
-    add_asm_library("aom_ports" "AOM_PORTS_ASM_X86" "aom")
-    set(aom_ports_has_symbols 1)
+#    add_asm_library("aom_ports" "AOM_PORTS_ASM_X86" "aom")
+#    set(aom_ports_has_symbols 1)
   elseif("${AOM_TARGET_CPU}" MATCHES "arm")
     add_library(aom_ports OBJECT ${AOM_PORTS_SOURCES_ARM})
     set(aom_ports_has_symbols 1)

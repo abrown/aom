@@ -314,8 +314,8 @@ if(NOT CONFIG_AV1_HIGHBITDEPTH)
                    "${AOM_ROOT}/av1/common/x86/highbd_convolve_2d_avx2.c")
 endif()
 
-list(APPEND AOM_AV1_ENCODER_ASM_SSE2 "${AOM_ROOT}/av1/encoder/x86/dct_sse2.asm"
-            "${AOM_ROOT}/av1/encoder/x86/error_sse2.asm")
+#list(APPEND AOM_AV1_ENCODER_ASM_SSE2 "${AOM_ROOT}/av1/encoder/x86/dct_sse2.asm"
+#            "${AOM_ROOT}/av1/encoder/x86/error_sse2.asm")
 
 list(APPEND AOM_AV1_ENCODER_INTRIN_SSE2
             "${AOM_ROOT}/av1/encoder/x86/av1_fwd_txfm_sse2.c"
@@ -334,8 +334,8 @@ endif()
 
 list(APPEND AOM_AV1_ENCODER_INTRIN_SSE3 "${AOM_ROOT}/av1/encoder/x86/ml_sse3.c")
 
-list(APPEND AOM_AV1_ENCODER_ASM_SSSE3_X86_64
-            "${AOM_ROOT}/av1/encoder/x86/av1_quantize_ssse3_x86_64.asm")
+#list(APPEND AOM_AV1_ENCODER_ASM_SSSE3_X86_64
+#            "${AOM_ROOT}/av1/encoder/x86/av1_quantize_ssse3_x86_64.asm")
 
 list(APPEND AOM_AV1_ENCODER_INTRIN_SSE4_1
             "${AOM_ROOT}/av1/encoder/x86/av1_fwd_txfm1d_sse4.c"
