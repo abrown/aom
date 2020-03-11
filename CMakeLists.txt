@@ -312,11 +312,10 @@ if(CONFIG_AV1_DECODER AND ENABLE_EXAMPLES)
       append_link_flag_to_target("inspect" "--memory-init-file 0")
 
       append_compiler_flag("-s SIMD=1")
-      if("${CMAKE_BUILD_TYPE}" STREQUAL "")
-
-        # Default to -O3 when no build type is specified.
-        append_compiler_flag("-O3")
-      endif()
+      append_compiler_flag("-fopenmp-simd")
+      append_compiler_flag("-DSIMDE_ENABLE_OPENMP")
+      append_compiler_flag("-munimplemented-simd128")
+      append_compiler_flag("-O3")
 
       em_link_post_js(inspect "${AOM_ROOT}/tools/inspect-post.js")
     endif()
